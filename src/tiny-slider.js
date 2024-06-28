@@ -1844,6 +1844,7 @@ export var tns = function(options) {
       const uncompleteActiveImagesCount = container.querySelectorAll(`.${slideActiveClass} img:not(.${imgCompleteClass})`).length;
       if (uncompleteActiveImagesCount === 0) {
         visibleSlidesLoadedCallback();
+        visibleSlidesLoadedCallbackCalled = true;
       }
     }
   }

@@ -775,13 +775,10 @@ var tns = function (options) {
       sheet = createStyleSheet(null, getOption('nonce')),
       lazyload = options.lazyload,
       lazyloadSelector = options.lazyloadSelector,
-      visibleSlidesLoadedCallback = options.visibleSlidesLoadedCallback,
-      //YouScribe custom code
-  visibleSlidesLoadedCallbackCalled = false,
-      //YouScribe custom code
-  slidePositions,
-      // collection of slide positions
-  slideItemsOut = [],
+      visibleSlidesLoadedCallback = options.visibleSlidesLoadedCallback, //YouScribe custom code
+      visibleSlidesLoadedCallbackCalled = false, //YouScribe custom code
+      slidePositions, // collection of slide positions
+      slideItemsOut = [],
       cloneCount = loop ? getCloneCountForLoop() : 0,
       slideCountNew = !carousel ? slideCount + cloneCount : slideCount + cloneCount * 2,
       hasRightDeadZone = (fixedWidth || autoWidth) && !loop ? true : false,
@@ -2583,6 +2580,7 @@ var tns = function (options) {
 
       if (uncompleteActiveImagesCount === 0) {
         visibleSlidesLoadedCallback();
+        visibleSlidesLoadedCallbackCalled = true;
       }
     }
   }
