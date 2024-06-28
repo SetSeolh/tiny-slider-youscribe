@@ -1841,7 +1841,7 @@ export var tns = function(options) {
 
     //YouScribe custom code
     if (visibleSlidesLoadedCallback && !visibleSlidesLoadedCallbackCalled) {
-      const uncompleteActiveImagesCount = container.querySelectorAll(`.${slideActiveClass}:not(.${imgCompleteClass})`).length;
+      const uncompleteActiveImagesCount = container.querySelectorAll(`.${slideActiveClass} img:not(.${imgCompleteClass})`).length;
       if (uncompleteActiveImagesCount === 0) {
         visibleSlidesLoadedCallback();
       }
