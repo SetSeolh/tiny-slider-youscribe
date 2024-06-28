@@ -2,6 +2,11 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+var win$1 = window;
+var raf = win$1.requestAnimationFrame || win$1.webkitRequestAnimationFrame || win$1.mozRequestAnimationFrame || win$1.msRequestAnimationFrame || function (cb) {
+  return setTimeout(cb, 16);
+};
+
 var win = window;
 var caf = win.cancelAnimationFrame || win.mozCancelAnimationFrame || function (id) {
   clearTimeout(id);
@@ -91,7 +96,7 @@ function resetFakeBody(body, docOverflow) {
   }
 }
 
-// get css-calc
+// get css-calc 
 function calc() {
   var doc = document,
       body = getBody(),
@@ -549,6 +554,8 @@ var tns = function (options) {
     responsive: false,
     lazyload: false,
     lazyloadSelector: '.tns-lazy-img',
+    visibleSlidesLoadedCallback: null,
+    //YouScribe custom code
     touch: true,
     mouseDrag: false,
     swipeAngle: 15,
@@ -768,7 +775,11 @@ var tns = function (options) {
       sheet = createStyleSheet(null, getOption('nonce')),
       lazyload = options.lazyload,
       lazyloadSelector = options.lazyloadSelector,
-      slidePositions,
+      visibleSlidesLoadedCallback = options.visibleSlidesLoadedCallback,
+      //YouScribe custom code
+  visibleSlidesLoadedCallbackCalled = false,
+      //YouScribe custom code
+  slidePositions,
       // collection of slide positions
   slideItemsOut = [],
       cloneCount = loop ? getCloneCountForLoop() : 0,
@@ -2565,7 +2576,15 @@ var tns = function (options) {
   function imgCompleted(img) {
     addClass(img, imgCompleteClass);
     removeClass(img, 'loading');
-    removeEvents(img, imgEvents);
+    removeEvents(img, imgEvents); //YouScribe custom code
+
+    if (visibleSlidesLoadedCallback && !visibleSlidesLoadedCallbackCalled) {
+      const uncompleteActiveImagesCount = container.querySelectorAll(`.${slideActiveClass}:not(.${imgCompleteClass})`).length;
+
+      if (uncompleteActiveImagesCount === 0) {
+        visibleSlidesLoadedCallback();
+      }
+    }
   }
 
   function getImageArray(start, end, imgSelector) {

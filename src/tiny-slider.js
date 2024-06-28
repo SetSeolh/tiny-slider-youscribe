@@ -99,6 +99,7 @@ export var tns = function(options) {
     responsive: false,
     lazyload: false,
     lazyloadSelector: '.tns-lazy-img',
+    visibleSlidesLoadedCallback: null, //YouScribe custom code
     touch: true,
     mouseDrag: false,
     swipeAngle: 15,
@@ -288,6 +289,8 @@ export var tns = function(options) {
       sheet = createStyleSheet(null, getOption('nonce')),
       lazyload = options.lazyload,
       lazyloadSelector = options.lazyloadSelector,
+      visibleSlidesLoadedCallback = options.visibleSlidesLoadedCallback, //YouScribe custom code
+      visibleSlidesLoadedCallbackCalled = false, //YouScribe custom code
       slidePositions, // collection of slide positions
       slideItemsOut = [],
       cloneCount = loop ? getCloneCountForLoop() : 0,
@@ -1835,6 +1838,14 @@ export var tns = function(options) {
     addClass(img, imgCompleteClass);
     removeClass(img, 'loading');
     removeEvents(img, imgEvents);
+
+    //YouScribe custom code
+    if (visibleSlidesLoadedCallback && !visibleSlidesLoadedCallbackCalled) {
+      const uncompleteActiveImagesCount = container.querySelectorAll(`.${slideActiveClass}:not(.${imgCompleteClass})`).length;
+      if (uncompleteActiveImagesCount === 0) {
+        visibleSlidesLoadedCallback();
+      }
+    }
   }
 
   function getImageArray (start, end, imgSelector) {
